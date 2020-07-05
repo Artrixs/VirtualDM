@@ -37,8 +37,20 @@ public class ID {
 		this.name = name;
 	}
 	
+	public static ID fromString(String string) {
+		String [] tokens = string.split(":");
+		if ( tokens.length > 2) {
+			throw new RuntimeException("ID: There are to many : in this ID string");
+		}
+		
+		if (tokens.length == 1)
+			return new ID(string);
+		return new ID(tokens[0], tokens[1]);
+	}
+	
 	public String getLocation() { return location; }
 	public String getName() { return name; }
+		
 	
 	@Override
 	public int hashCode() {
@@ -69,8 +81,8 @@ public class ID {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
-	}	
-	
+	}
+
 	@Override
 	public String toString() {
 		return location + ":" + name;

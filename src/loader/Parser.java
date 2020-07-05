@@ -59,7 +59,9 @@ public class Parser {
 			e.printStackTrace();
 			throw new RuntimeException("Parser: IO Error reading file " + path );
 		}
+		//Tokenize file
 		tokens = Scanner.tokenize(new String(bytes, Charset.defaultCharset()) , path.toFile().getName());
+		
 		
 		return parseLayout(layout);
 	}
@@ -71,7 +73,6 @@ public class Parser {
 		while( !isEnd() ) {
 			namespace();
 		}
-		
 		return loaderElements;
 	}
 	
