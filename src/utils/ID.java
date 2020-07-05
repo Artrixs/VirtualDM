@@ -28,7 +28,7 @@ public class ID {
 	private String name;
 	
 	public ID(String location, String name) {
-		this.location = this.name;
+		this.location = location;
 		this.name = name;
 	}
 	
