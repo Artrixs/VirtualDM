@@ -26,6 +26,7 @@ import java.util.List;
 
 import apparatus.TrackCircuit;
 import train.Train;
+import utils.ID;
 import trackinfrastructure.trackside.TracksideElement;
 
 /**
@@ -37,7 +38,7 @@ public abstract class TrackElement {
 	
 	static enum Type { TRACK, BUFFERSTOP, JOINT, ENTRYEXIT, SWITCH };
 	
-	private String id;
+	private ID id;
 	private Type type = null;
 	
 	protected List<Route> activeRoutes;
@@ -53,7 +54,7 @@ public abstract class TrackElement {
 	public abstract void getOccupation( Route route, double distance );
 	public abstract Route getOppositeRoute( Route route );
 		
-	public TrackElement( String id, Type type ) {
+	public TrackElement( ID id, Type type ) {
 		this.id = id;
 		this.type = type;
 		
@@ -143,6 +144,6 @@ public abstract class TrackElement {
 		
 	@Override
 	public String toString() {
-		return id;
+		return id.toString();
 	}
 }

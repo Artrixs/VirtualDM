@@ -24,6 +24,8 @@ package trackinfrastructure.trackelements;
 import java.util.ArrayList;
 import java.util.List;
 
+import utils.ID;
+
 /*
  * Idea per gestire la trackoccupation, si ragiona su due corridoio, il primo per un treno che non è in manovra deve fermarsi prima
  * non serve molta granularità nella gestione. Se però è in manovra deve potersi accostare se l'occupazione è sulla stessa route
@@ -34,7 +36,7 @@ public abstract class MultiRouteTrackElement extends TrackElement {
 
 	protected List<Route> possibleRoutes;
 	
-	public MultiRouteTrackElement(String id, Type type) {
+	public MultiRouteTrackElement(ID id, Type type) {
 		super(id, type);
 		this.possibleRoutes = new ArrayList<Route>();
 	}

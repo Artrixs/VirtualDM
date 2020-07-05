@@ -21,9 +21,11 @@
  */
 package trackinfrastructure.trackelements;
 
+import utils.ID;
+
 public class BufferStop extends SingleRouteTrackElement {
 	
-	public BufferStop( String id, double length ) {
+	public BufferStop( ID id, double length ) {
 		super( id, Type.BUFFERSTOP, length );
 		
 	}

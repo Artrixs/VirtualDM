@@ -22,6 +22,7 @@
 package trackinfrastructure.trackelements;
 
 import trackinfrastructure.trackside.TracksideElement;
+import utils.ID;
 
 
 public abstract class SingleRouteTrackElement extends TrackElement {
@@ -31,7 +32,7 @@ public abstract class SingleRouteTrackElement extends TrackElement {
 	private double length;
 	
 	
-	public SingleRouteTrackElement( String id, Type type, double length ) {
+	public SingleRouteTrackElement( ID id, Type type, double length ) {
 		super( id, type );
 		this.length = length;
 		

@@ -25,6 +25,7 @@ import java.util.List;
 
 import trackinfrastructure.trackside.TracksideElement;
 import train.Train;
+import utils.ID;
 
 public class EntryExitPoint extends TrackElement {
 
@@ -34,7 +35,7 @@ public class EntryExitPoint extends TrackElement {
 	private Route entryRoute, exitRoute;
 	private List<Train> trains;
 	
-	public EntryExitPoint( String id, List<Train> trains ) {
+	public EntryExitPoint( ID id, List<Train> trains ) {
 		super( id, Type.BUFFERSTOP );
 		this.trains = trains;
 		

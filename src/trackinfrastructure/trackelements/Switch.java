@@ -22,6 +22,7 @@
 package trackinfrastructure.trackelements;
 
 import trackinfrastructure.trackside.TracksideElement;
+import utils.ID;
 
 public class Switch extends MultiRouteTrackElement {
 	
@@ -29,7 +30,7 @@ public class Switch extends MultiRouteTrackElement {
 	private double lengthA, lengthB, lengthC;
 	private Route routeAB, routeAC, routeBA, routeCA;
 	
-	public Switch( String id, double lengthA, double lengthB, double lengthC ) {
+	public Switch( ID id, double lengthA, double lengthB, double lengthC ) {
 		super( id, Type.SWITCH );
 		this.lengthA = lengthA;
 		this.lengthB = lengthB;

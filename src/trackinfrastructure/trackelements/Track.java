@@ -21,10 +21,12 @@
  */
 package trackinfrastructure.trackelements;
 
+import utils.ID;
+
 public class Track extends SingleRouteTrackElement {
 	//TODO implement proper rappresentation of occupation of the track!
 	
-	public Track( String id, double length ) {
+	public Track( ID id, double length ) {
 		super( id, Type.TRACK, length );
 	}
 

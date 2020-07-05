@@ -22,10 +22,11 @@
 package trackinfrastructure.trackelements;
 
 import trackinfrastructure.trackside.TracksideElement;
+import utils.ID;
 
 public class Joint extends SingleRouteTrackElement {
 
-	public Joint( String id ) {
+	public Joint( ID id ) {
 		super( id, Type.JOINT, 0 );
 	}
 	
