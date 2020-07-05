@@ -22,11 +22,18 @@
 package utils;
 
 public class ID {
+	private static String global = "Global";
+	
 	private String location;
 	private String name;
 	
 	public ID(String location, String name) {
 		this.location = this.name;
+		this.name = name;
+	}
+	
+	public ID(String name) {
+		this.location = global;
 		this.name = name;
 	}
 	
@@ -63,5 +70,10 @@ public class ID {
 			return false;
 		return true;
 	}	
+	
+	@Override
+	public String toString() {
+		return location + ":" + name;
+	}
 
 }
