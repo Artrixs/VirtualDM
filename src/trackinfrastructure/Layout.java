@@ -43,11 +43,23 @@ public class Layout {
 		this.tracksideElements = new HashMap<ID, TracksideElement>();
 	}
 	
-	public void addTrackElement( ID id, TrackElement el ) { trackElements.put( id, el ) ; }
-	public void addTracksideElement( ID id, TracksideElement el) { tracksideElements.put( id, el ) ; }
-	
 	public TrackElement getTrackElement( ID id ) { return trackElements.get( id ); }
 	public TracksideElement getTracksideElement( ID id ) { return tracksideElements.get( id ) ; }
+	
+	public void addTrackElement( ID id, TrackElement el ) { 
+		if ( trackElements.containsKey( id ) ) {
+			throw new RuntimeException("Layout: There is already an element with this ID in the layout!");
+		}
+		trackElements.put( id, el ); 
+	}
+	public void addTracksideElement( ID id, TracksideElement el) {
+		if ( tracksideElements.containsKey( id ) ) {
+			throw new RuntimeException("Layout: There is already an element with this ID in the layout!");
+		}
+		tracksideElements.put( id, el );
+	}
+	
+
 	
 
 }
