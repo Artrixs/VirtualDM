@@ -47,11 +47,33 @@ public abstract class SingleRouteTrackElement extends TrackElement {
 		this.activeRoutes.add( routeBA );
 	}
 	
-	public Point getPointA() { return this.pointA; }
-	public Point getPointB() { return this.pointB; }
+	@Override
+	public void setConnection(char point, Point connectsTo ) {
+		switch (point) {
+		case 'A':
+			setPointConnection(this.pointA, connectsTo);
+			break;
+		case 'B':
+			setPointConnection(this.pointB, connectsTo);
+			break;
+		default:
+			throw new RuntimeException("SingleRouteTrackElement: " + point + " is not a valid point for this element");
+		}
+	}
 	
-	public void setConnectionA( Point connectsTo ) { setPointConnection(this.pointA, connectsTo);	}
-	public void setConnectionB( Point connectsTo ) { setPointConnection(this.pointB, connectsTo);	}
+	@Override
+	public Point getPoint(char point) {
+		switch (point) {
+		case 'A':
+			return this.pointA;
+		case 'B':
+			return this.pointB;
+		default:
+			throw new RuntimeException("SingleRouteTrackElement: " + point + " is not a valid point for this element");
+		}
+	}
+	
+	
 	
 	@Override
 	public void addTracksideElement( TracksideElement element, Point from, double distance, int direction ) {

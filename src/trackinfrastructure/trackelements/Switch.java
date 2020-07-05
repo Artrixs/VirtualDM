@@ -57,13 +57,36 @@ public class Switch extends MultiRouteTrackElement {
 		addActiveRoute( routeBA );
 	}
 	
-	public Point getPointA() { return this.pointA; }
-	public Point getPointB() { return this.pointB; }
-	public Point getPointC() { return this.pointC; }
+	@Override
+	public void setConnection(char point, Point connectsTo ) {
+		switch (point) {
+		case 'A':
+			setPointConnection(this.pointA, connectsTo);
+			break;
+		case 'B':
+			setPointConnection(this.pointB, connectsTo);
+			break;
+		case 'C':
+			setPointConnection(this.pointC, connectsTo);
+			break;
+		default:
+			throw new RuntimeException("SingleRouteTrackElement: " + point + " is not a valid point for this element");
+		}
+	}
 	
-	public void setConnectionA( Point connectsTo ) { setPointConnection(pointA, connectsTo ); }
-	public void setConnectionB( Point connectsTo ) { setPointConnection(pointB, connectsTo ); }
-	public void setConnectionC( Point connectsTo ) { setPointConnection(pointC, connectsTo ); }
+	@Override
+	public Point getPoint(char point) {
+		switch (point) {
+		case 'A':
+			return this.pointA;
+		case 'B':
+			return this.pointB;
+		case 'C':
+			return this.pointC;
+		default:
+			throw new RuntimeException("SingleRouteTrackElement: " + point + " is not a valid point for this element");
+		}
+	}
 	
 	public void setOnB() {
 		if ( activeRoutes.contains( routeAB ) )

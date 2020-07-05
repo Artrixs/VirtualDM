@@ -53,6 +53,8 @@ public abstract class TrackElement {
 	public abstract void addTracksideElement( TracksideElement element, Point from, double distance, int direction );
 	public abstract void getOccupation( Route route, double distance );
 	public abstract Route getOppositeRoute( Route route );
+	public abstract void setConnection(char point, Point connectsTo);
+	public abstract Point getPoint(char point);
 		
 	public TrackElement( ID id, Type type ) {
 		this.id = id;

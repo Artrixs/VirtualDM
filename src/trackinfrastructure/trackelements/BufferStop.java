@@ -31,8 +31,17 @@ public class BufferStop extends SingleRouteTrackElement {
 	}
 
 	@Override
-	public void setConnectionB( Point connectsTo ) {
-		throw new RuntimeException("setConnectionB: BufferStops can not have a connection on the B side");
+	public void setConnection(char point, Point connectsTo ) {
+		if(point == 'B')
+			throw new RuntimeException("BufferStop: can connect only on one side");
+		super.setConnection(point, connectsTo);
+	}
+	
+	@Override
+	public Point getPoint(char point) {
+		if(point == 'B')
+			throw new RuntimeException("BufferStop: connects only on one side");
+		return super.getPoint(point);
 	}
 
 }

@@ -50,8 +50,26 @@ public class EntryExitPoint extends TrackElement {
 		this.activeRoutes.add( exitRoute );
 	}
 	
-	public Point getConnectionPoint() { return this.connectionPoint; }
-	public void setConnectionPoint( Point point ) { setPointConnection( this.connectionPoint, point ); }
+	@Override
+	public void setConnection(char point, Point connectsTo ) {
+		switch (point) {
+		case 'A':
+			setPointConnection(this.connectionPoint, connectsTo);
+			break;
+		default:
+			throw new RuntimeException("EntryExitPoint: " + point + " is not a valid point for this element");
+		}
+	}
+	
+	@Override
+	public Point getPoint(char point) {
+		switch (point) {
+		case 'A':
+			return this.connectionPoint;
+		default:
+			throw new RuntimeException("EntryExitPoint: " + point + " is not a valid point for this element");
+		}
+	}
 	
 	public Train enterTrain( double length, double speed ) {
 		Train train = new Train( length );
