@@ -42,6 +42,7 @@ public class Scanner {
 	static { 
 		keywords.put("namespace",	TokenType.NAMESPACE);
 		keywords.put("Track",		TokenType.TRACK);
+		keywords.put("id", TokenType.ID);
 	}
 	
 	public static List<Token> tokenize(String fileSource, String name) {
@@ -162,6 +163,7 @@ public class Scanner {
 	}
 	
 	private static char advance() {
+		if ( isEnd() ) return '\0';
 		current++;
 		return source.charAt(current - 1);
 	}
