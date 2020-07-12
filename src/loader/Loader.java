@@ -21,8 +21,13 @@
  */
 package loader;
 
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,13 +42,30 @@ public class Loader {
 	private static Layout layout;
 	private static List<LoaderElement> loaderElements;
 	
-	public static Layout load( String file ) {
+	public static Layout load( String baseDir )  {
+		if(!Files.isDirectory(Paths.get(baseDir)))
+			throw new LoaderError(baseDir + " is not the base directory of a line");
+		
 		layout = new Layout();
 		loaderElements = new ArrayList<LoaderElement>();
 		
-		//Loads all the files
-		Path filePath = Paths.get(file);
-		loaderElements.addAll( Parser.parse( filePath, layout ));
+		//Inspect recursivly the line's directory, for the moment when it encounters a .layout file we load it.
+		try {
+			Files.walkFileTree(Paths.get(baseDir), new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+			            throws IOException {
+			        if ( file.toString().endsWith(".layout" ) ) {
+			        	System.out.println("Loaded");
+			        	loaderElements.addAll(Parser.parseLayout(file, layout));
+			        }
+			        return FileVisitResult.CONTINUE;
+			    }
+			});
+		} catch (IOException e) {
+			throw new LoaderError("Failed opening file " + baseDir + e.getStackTrace());
+		}
+		
 		
 		for (LoaderElement el : loaderElements) {
 			updateElement(el);

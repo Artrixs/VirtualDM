@@ -48,8 +48,9 @@ public class Parser {
 	private static List<LoaderElement> loaderElements;
 	private static Layout layout;
 	private static String inNamespace;
+
 	
-	public static List<LoaderElement> parse(Path path, Layout passedLayout) {	
+	public static List<LoaderElement> parseLayout(Path path, Layout passedLayout) {
 		layout = passedLayout;
 		
 		byte[] bytes;
@@ -59,14 +60,10 @@ public class Parser {
 		} catch (IOException e) {
 			throw new ParserError("IO Error reading file " + path + e.getStackTrace());
 		}
+		
 		//Tokenize file
 		tokens = Scanner.tokenize(new String(bytes, Charset.defaultCharset()) , path.toFile().getName());
 		
-		
-		return parseLayout(layout);
-	}
-	
-	private static List<LoaderElement> parseLayout(Layout layout) {
 		loaderElements = new ArrayList<LoaderElement>();
 		inNamespace = null;
 		
