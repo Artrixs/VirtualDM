@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trackinfrastructure.Layout;
+import trackinfrastructure.trackelements.Switch;
 import trackinfrastructure.trackelements.Track;
 import utils.ID;
 import loader.Token.TokenType;
@@ -98,6 +99,9 @@ public class Parser {
 		case TRACK:
 			track();
 			break;
+		case SWITCH:
+			switch_();
+			break;
 		default:
 			throw new RuntimeException("Unrecognized type element");
 		}
@@ -120,6 +124,32 @@ public class Parser {
 		
 		layout.addTrackElement(id, new Track(id, length));
 		loaderElements.add(loaderElement);
+	}
+	
+	private static void switch_() {
+		var loaderElement = parseTrackElement(LoaderElement.Type.SWITCH, "lengthA", "lengthB", "lengthC");
+		var id = loaderElement.getID();
+		
+		double lengthA = (double) loaderElement.getAttribute("lengthA");
+		double lengthB = (double) loaderElement.getAttribute("lengthB");
+		double lengthC = (double) loaderElement.getAttribute("lengthC");
+		
+		layout.addTrackElement(id, new Switch(id, lengthA, lengthB, lengthC));
+		loaderElements.add(loaderElement);		
+	}
+	
+	private static LoaderElement parseTrackElement(LoaderElement.Type type, String... requiredAttributes) {
+		ID id = parseID();
+		LoaderElement loaderElement = new LoaderElement(id, type);
+		
+		while ( check( TokenType.IDENTIFIER ) ) {
+			parseAttribute( loaderElement );
+		}
+		
+		String name = loaderElement.hasAttributes(requiredAttributes);
+		if ( name != null ) 
+			throw new RuntimeException("Must have a " + name);
+		return loaderElement;
 	}
 	
 	private static ID parseID() {

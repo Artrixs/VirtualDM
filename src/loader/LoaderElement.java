@@ -6,7 +6,7 @@ import utils.ID;
 
 public class LoaderElement {
 	
-	static enum Type { TRACK }
+	static enum Type { TRACK, SWITCH }
 	
 	Type type;
 	ID id;
@@ -25,6 +25,15 @@ public class LoaderElement {
 	
 	public boolean hasAttribute(String name) { return attributes.containsKey(name); } 
 	public Object getAttribute(String name) { return attributes.get(name); }
+	
+	public ID getID() { return this.id; }
+	
+	public String hasAttributes(String... attributes) {
+		for (String name : attributes )
+			if(!hasAttribute(name))
+				return name;
+		return null;
+	}
 	
 	@Override
 	public String toString() {

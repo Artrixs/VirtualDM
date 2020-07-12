@@ -31,7 +31,7 @@ public class Token {
 		IDENTIFIER, STRING, NUMBER, 
 		
 		//Keywords
-		NAMESPACE, ID, TRACK,
+		NAMESPACE, ID, TRACK, SWITCH,
 		
 		EOF
 	}

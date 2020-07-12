@@ -57,7 +57,9 @@ public class Loader {
 			case TRACK:
 				updateTrack(el);
 				break;
-				
+			case SWITCH:
+				setConnections(el, 'A', 'B', 'C');
+				break;			
 			default:
 				throw new RuntimeException("Loader: Element type not supported");
 		}

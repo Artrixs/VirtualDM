@@ -42,6 +42,7 @@ public class Scanner {
 	static { 
 		keywords.put("namespace",	TokenType.NAMESPACE);
 		keywords.put("Track",		TokenType.TRACK);
+		keywords.put("Switch", 		TokenType.SWITCH);
 		keywords.put("id", TokenType.ID);
 	}
 	
