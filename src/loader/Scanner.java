@@ -90,7 +90,7 @@ public class Scanner {
 			} else if ( isAlpha(c) ) {
 				identifier();
 			} else {
-				throw new RuntimeException("Parser: Unexcepted charachter '" + c + "' at " + fileName + ":" + line);
+				throw new ScannerError("Unexpected charachter " + c);
 			}
 		}
 		return;
@@ -104,7 +104,7 @@ public class Scanner {
 			advance();
 		}
 		
-		if ( isEnd() ) throw new RuntimeException("Parser: Unterminated string at " + fileName + ":" + line);
+		if ( isEnd() ) throw new ScannerError("Unterminated string");
 		
 		advance();
 		
@@ -195,6 +195,12 @@ public class Scanner {
 	
 	private static boolean isEnd() {
 		return current >= source.length();
+	}
+	
+	private static class ScannerError extends RuntimeException {
+		public ScannerError(String errorMessage) {
+			super("[Scanner] " + fileName + ":" + line + ": " + errorMessage);
+		}
 	}
 
 }

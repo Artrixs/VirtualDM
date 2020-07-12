@@ -57,8 +57,7 @@ public class Parser {
 			// For large files you should use a buffered reader!
 			bytes = Files.readAllBytes(path);
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Parser: IO Error reading file " + path );
+			throw new ParserError("IO Error reading file " + path + e.getStackTrace());
 		}
 		//Tokenize file
 		tokens = Scanner.tokenize(new String(bytes, Charset.defaultCharset()) , path.toFile().getName());
@@ -103,7 +102,7 @@ public class Parser {
 			switch_();
 			break;
 		default:
-			throw new RuntimeException("Unrecognized type element");
+			throw new ParserError("Unrecognized type element", t);
 		}
 		
 		consume(TokenType.GREATER, "Expeced > after a statement");
@@ -141,7 +140,7 @@ public class Parser {
 		
 		String name = loaderElement.hasAttributes(requiredAttributes);
 		if ( name != null ) 
-			throw new RuntimeException("Must have a " + name);
+			throw new ParserError(type + " must have the following attribute:" + name);
 		return loaderElement;
 	}
 	
@@ -204,6 +203,16 @@ public class Parser {
 	
 	private static boolean isEnd() {
 		return current >= tokens.size() || tokens.get(current).type == TokenType.EOF;
+	}
+	
+	private static class ParserError extends RuntimeException {
+		public ParserError(String errorMessage) {
+			super("[Parser] " + errorMessage);
+		}
+		
+		public ParserError(String errorMessage, Token t) {
+			super("[Parser]" + errorMessage + t);
+		}
 	}
 	
 }

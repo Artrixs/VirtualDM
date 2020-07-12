@@ -61,7 +61,7 @@ public class Loader {
 				setConnections(el, 'A', 'B', 'C');
 				break;			
 			default:
-				throw new RuntimeException("Loader: Element type not supported");
+				throw new LoaderError("The element type: " + el.type + "is not currently supported");
 		}
 	}
 		
@@ -80,10 +80,10 @@ public class Loader {
 		
 		// Extract the point of connection
 		char pointOfConnection;
-		if (parts[parts.length-1].length() > 1) throw new RuntimeException("Loader: Connection point must be a single letter");
+		if (parts[parts.length-1].length() > 1) throw new LoaderError("Connection point must be a single letter");
 		pointOfConnection = string.charAt(string.length() - 1 );
 		if( !(pointOfConnection >= 'A' && pointOfConnection <= 'Z') ) {
-			throw new RuntimeException("Loader: Connection point is not a uppercase letter");
+			throw new LoaderError("Connection point is not a uppercase letter");
 		}
 		
 		//Get the other trackElement
@@ -96,6 +96,12 @@ public class Loader {
 		TrackElement track = layout.getTrackElement( id );
 		
 		return track.getPoint(pointOfConnection);
+	}
+	
+	private static class LoaderError extends RuntimeException {
+		public LoaderError(String errorMessage) {
+			super("[Loader] "  + errorMessage);
+		}
 	}
 
 }
