@@ -55,7 +55,7 @@ public class Loader {
 	private static void updateElement(LoaderElement el) {
 		switch( el.type ) {
 			case TRACK:
-				updateTrack(el);
+				setConnections(el, 'A', 'B');
 				break;
 			case SWITCH:
 				setConnections(el, 'A', 'B', 'C');
@@ -64,12 +64,7 @@ public class Loader {
 				throw new RuntimeException("Loader: Element type not supported");
 		}
 	}
-	
-	private static void updateTrack(LoaderElement el) {
-		setConnections(el, 'A', 'B');
 		
-	}
-	
 	private static void setConnections(LoaderElement el, char... points) {
 		TrackElement trackElement = layout.getTrackElement(el.id);
 		for(char c : points) {

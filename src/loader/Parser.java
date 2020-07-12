@@ -110,16 +110,9 @@ public class Parser {
 	}
 	
 	private static void track() {
-		ID id = parseID();
-		
-		var loaderElement = new LoaderElement(id, LoaderElement.Type.TRACK);
-		while( check(TokenType.IDENTIFIER) ) {
-			parseAttribute(loaderElement);
-		}
-		
-		if( !loaderElement.hasAttribute("length") ) {
-			throw new RuntimeException("Track elemenet must have a lenght!");
-		}
+		var loaderElement = parseTrackElement(LoaderElement.Type.TRACK, "length");
+		var id = loaderElement.getID();
+
 		double length = (double) loaderElement.getAttribute("length");
 		
 		layout.addTrackElement(id, new Track(id, length));
