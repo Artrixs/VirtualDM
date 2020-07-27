@@ -37,12 +37,13 @@ public class Scanner {
 	private static int line;
 	private static String fileName;
 	
-	private static Map<String, TokenType> keywords = new HashMap();
+	private static Map<String, TokenType> keywords = new HashMap<String, TokenType>();
 	
 	static { 
 		keywords.put("namespace",	TokenType.NAMESPACE);
 		keywords.put("Track",		TokenType.TRACK);
 		keywords.put("Switch", 		TokenType.SWITCH);
+		keywords.put("TrackCircuit",TokenType.TRACK_CIRCUIT);
 		keywords.put("id", TokenType.ID);
 	}
 	

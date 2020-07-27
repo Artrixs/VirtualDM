@@ -24,9 +24,9 @@ package trackinfrastructure.trackelements;
 import java.util.ArrayList;
 import java.util.List;
 
-import apparatus.TrackCircuit;
 import train.Train;
 import utils.ID;
+import trackinfrastructure.TrackCircuit;
 import trackinfrastructure.trackside.TracksideElement;
 
 /**

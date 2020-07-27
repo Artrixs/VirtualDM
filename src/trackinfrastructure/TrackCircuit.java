@@ -19,24 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package apparatus;
+package trackinfrastructure;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import trackinfrastructure.trackelements.TrackElement;
+import utils.ID;
 import utils.IUpdatable;
 import utils.UpdateList;
 
 public class TrackCircuit implements IUpdatable {
 	static enum State {FREE, OCCUPIED, BLOCKED}
 	
-	private String id;
+	private ID id;
 	private State state;
 	private List<TrackElement> tracks;
 	private UpdateList updateList;
 	
-	public TrackCircuit (String id, UpdateList updateList) {
+	public TrackCircuit (ID id, UpdateList updateList) {
 		this.id = id;
 		this.state = State.FREE;
 		tracks = new ArrayList<TrackElement>();

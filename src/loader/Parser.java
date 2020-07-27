@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trackinfrastructure.Layout;
+import trackinfrastructure.TrackCircuit;
 import trackinfrastructure.trackelements.Switch;
 import trackinfrastructure.trackelements.Track;
 import utils.ID;
@@ -98,6 +99,9 @@ public class Parser {
 		case SWITCH:
 			switch_();
 			break;
+		case TRACK_CIRCUIT:
+			trackCircuit();
+			break;
 		default:
 			throw new ParserError("Unrecognized type element", t);
 		}
@@ -125,6 +129,11 @@ public class Parser {
 		
 		layout.addTrackElement(id, new Switch(id, lengthA, lengthB, lengthC));
 		loaderElements.add(loaderElement);		
+	}
+	
+	private static void trackCircuit() {
+		var id = parseID();
+		layout.addTrackCircuit(id, new TrackCircuit(id, layout.getUpdateList() ) );
 	}
 	
 	private static LoaderElement parseTrackElement(LoaderElement.Type type, String... requiredAttributes) {
@@ -208,7 +217,7 @@ public class Parser {
 		}
 		
 		public ParserError(String errorMessage, Token t) {
-			super("[Parser]" + errorMessage + t);
+			super("[Parser] " + errorMessage + t);
 		}
 	}
 	

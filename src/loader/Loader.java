@@ -78,9 +78,11 @@ public class Loader {
 		switch( el.type ) {
 			case TRACK:
 				setConnections(el, 'A', 'B');
+				setParentTrackCircuit(el);
 				break;
 			case SWITCH:
 				setConnections(el, 'A', 'B', 'C');
+				setParentTrackCircuit(el);
 				break;			
 			default:
 				throw new LoaderError("The element type: " + el.type + "is not currently supported");
@@ -94,6 +96,23 @@ public class Loader {
 			if( el.hasAttribute( value ) ) {
 				trackElement.setConnection(c, getPointConnection(el, (String) el.getAttribute( value )));
 			}
+		}
+	}
+	
+	
+	private static void setParentTrackCircuit(LoaderElement el) {
+		TrackElement trackElement = layout.getTrackElement(el.id);
+		if( el.hasAttribute( "circuit" ) ) {
+			String value = (String) el.getAttribute("circuit");
+			ID id;
+			if ( value.contains(":") )
+				id = ID.fromString(value);
+			else
+				id = ID.fromString(el.id.getLocation() + ":" + value);
+					
+			var trackCircuit = layout.getTrackCircuit(id);
+			
+			trackElement.setParentTrackCircuit(trackCircuit);		
 		}
 	}
 	
