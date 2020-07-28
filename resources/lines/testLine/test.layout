@@ -1,0 +1,10 @@
+namespace Tesla {
+	<Track id="track1" connectionB="switch1:A" length=400 circuit="ct1">
+	<Track id="track2" connectionA="switch1:B" length=400 circuit="ct2">
+	<Track id="track3" connectionA="switch1:C" length=400 circuit="ct3">
+	<Switch id="switch1" lengthA=20 lengthB=20 lengthC=20 >
+	<TrackCircuit id="ct1">
+	<TrackCircuit id="ct2">
+	<TrackCircuit id="ct3">
+}
+

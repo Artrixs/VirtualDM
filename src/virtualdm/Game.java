@@ -3,51 +3,74 @@ package virtualdm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-
-import apparatus.TrackCircuit;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import trackinfrastructure.trackelements.EntryExitPoint;
+import loader.Loader;
+import ql.Ql;
+import trackinfrastructure.Layout;
 import trackinfrastructure.trackelements.Switch;
 import trackinfrastructure.trackelements.Track;
-import trackinfrastructure.trackside.Signal;
-import train.TargetSpeed;
 import train.Train;
-import utils.UpdateList;
-import train.TargetSpeed.Type;
+import utils.ID;
 
 
 public class Game extends Application {
 	
-	private Label label;
-	private Label clock;
-	private Label circuitL;
+	private static long time;
+	
 	private Train train;
-	private TrackCircuit circuit;
+	private Layout layout;
+	private Ql ql;
+	
+	private Label l_trainInfo, l_clock;
+	
+	private Pane root;
+	
 	private List<Train> trains = new ArrayList<Train>();
+
 	
-	private UpdateList updateList;
+	public Game() {
+		time = System.nanoTime();
+		
+        System.out.println("Loading...");
+        try {
+        	layout = Loader.load("resources/lines/testLine");
+        	ql = new Ql(600,200, layout);
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        	System.exit(1);
+        }
+        System.out.println("Done loading");
+        
+        train = new Train(100);
+		Track track = (Track) layout.getTrackElement(ID.getFromString("Tesla:track1"));
+		train.setPosition(track.getRoute(track.getPoint('A')), 125);
+		trains.add(train);
+	}
 	
-    @Override
-    public void start(Stage stage) {
-    	stage.setTitle("Let's try something different!");
-        label = new Label("Train info goes here");
-        clock = new Label("Clock: 00:02:03");
-        circuitL = new Label("Circuit info goes here");
-        Button start = new Button("Start");
-        Button stop = new Button("Stop");
-        Button startTrain = new Button("Start/stop train");
+	@Override
+	public void init() {	
+        l_trainInfo = new Label("Train info goes here");
+        l_clock = new Label("Clock: 00:02:03");
+        
+    	Button startClock = new Button("Start");
+        Button stopClock = new Button("Stop");
+        Button startTrain = new Button("Start train");
         Button reverseTrain = new Button("Reverse");
-        start.setOnAction(event -> {
+        Button switchB = new Button("Switch to B");
+        Button switchC = new Button("Switch to C");
+        
+        startClock.setOnAction(event -> {
         	Clock.start();
         });
-        stop.setOnAction(event ->{
+        stopClock.setOnAction(event ->{
         	Clock.stop();
         });
         startTrain.setOnAction(event -> {
@@ -57,97 +80,74 @@ public class Game extends Application {
         	train.reverse();
         });
         
-        updateList = new UpdateList();
+        var trackSwitch = (Switch) layout.getTrackElement(ID.getFromLocationName("Tesla", "switch1"));
+        switchB.setOnAction(event -> {
+        	trackSwitch.setOnB();
+        });
+        switchC.setOnAction(event -> {
+        	trackSwitch.setOnC();
+        });
         
-        Scene scene = new Scene(new VBox(clock, circuitL,label, new HBox(start,stop,startTrain,reverseTrain)), 600, 200);
-        stage.setScene(scene);
+        var buttonBox = new HBox(startClock, stopClock, startTrain, reverseTrain, switchB, switchC);
+        root = new VBox(l_clock, l_trainInfo, buttonBox, ql);
+	}
+	
+    @Override
+    public void start(Stage stage) {	
+        Scene scene = new Scene(root, 600, 400);
+        
+        stage.setTitle("VirtualDM");
+        stage.setScene(scene);      
         stage.show();
-        
-        /**
-        EntryExitPoint entry = new EntryExitPoint("entry",trains);
-        Track track1 = new Track("Track1", 1000);
-		Track track2 = new Track("Track2", 600);
-		Track track3 = new Track("Track3", 400);
-		Switch switch1 = new Switch("Switch1", 10,20,30);
-		EntryExitPoint exit = new EntryExitPoint("exit", trains);
 		
-		entry.setConnectionPoint(track1.getPointA());
-		//track1.setConnectionB(switch1.getPointA());
-		track2.setConnectionA(switch1.getPointB());
-		track3.setConnectionA(switch1.getPointC());
-		exit.setConnectionPoint(track2.getPointB());
-		
-		
-		
-		circuit = new TrackCircuit("CB1", updateList);
-		track1.setParentTrackCircuit(circuit);
-		switch1.setParentTrackCircuit(circuit);
-		
-		Signal signal1 = new Signal("Signal 1");
-		track1.addTracksideElement(signal1, track1.getPointA(), 150, 1);
-		signal1.setAspect(Signal.Aspect.GREEN);
-		
-		Signal signal2 = new Signal("Signal 2");
-		track1.addTracksideElement(signal2, track1.getPointB(), 800, -1);
-
-		//train = new Train(100);
-		//train.setPosition(track2.getRoute(track2.getPointA()), 20, 0/3.6);
-		//trains.add(train);
-		**/
-        Track track1 = new Track("track1",400);
-        Track track2 = new Track("track2",50);
-        Track track3 = new Track("track3",400);
-        
-        track1.setConnectionB(track2.getPointA());
-        track2.setConnectionB(track3.getPointA());
-        
-		train = new Train(100);
-		train.setPosition(track3.getRoute(track3.getPointA()), 25);
-		trains.add(train);
-		
-		//train.start();
-		//train.addTargetSpeed(10/3.6, 0, TargetSpeed.Type.LINE);
-		//train = exit.enterTrain(100, 10/3.6);
-		//train.addTargetSpeed(10/3.6, 0, TargetSpeed.Type.LINE);
-        
         Clock.set(0, 0, 0);
 		Clock.setTimeCompression(1);
 		Clock.start();
 		
-		 AnimationTimer animator = new AnimationTimer(){
-
-             @Override
+		AnimationTimer animator = new AnimationTimer(){
+          	@Override
              public void handle(long arg0) {
-            	 if(Clock.isRunning()) {
-            		 Clock.tick();
-            		 clock.setText("Clock. " + Clock.string());
-            		 
-            		 updateList.runUpdates();
-            		          	 
-             		 StringBuilder builder = new StringBuilder();
-             		 ListIterator<Train> iter = trains.listIterator();
-             		 Train t;
-             		 while(iter.hasNext()) {
-             			 t = iter.next();
-             			 t.update();
-             			 builder.append(t+"\n");
-             			 if(t.isToBeRemoved())
-             				 iter.remove();
-             		 }
-             		 label.setText(builder.toString());
-             		 //circuitL.setText(circuit.toString());
-            	 }          	
+            	    update();      	
              }      
          };
          animator.start();  		
     }
+    
+    private void update() {
+    	if ( Clock.isRunning() ) {
+	   		Clock.tick();
+	   		l_clock.setText("Clock. " + Clock.string());
+	   		 
+	   		layout.getUpdateList().runUpdates();
+	   		ql.update();
+	   		          	 
+	    	StringBuilder builder = new StringBuilder();
+	    	ListIterator<Train> iter = trains.listIterator();
+	    	Train t;
+	    	while(iter.hasNext()) {
+	    		t = iter.next();
+	    		t.update();
+	    		builder.append(t+"\n");
+	    		if(t.isToBeRemoved())
+	    			iter.remove();
+	    	}
+	    	l_trainInfo.setText(builder.toString());  	
+    	} 
+    }
 
     public static void main(String[] args) {
     		try {
-    			launch();
+    			launch(Game.class, args);
     		}catch (RuntimeException e) {
     			System.out.println(e);
+    			e.printStackTrace();
+    			System.exit(1);
     		}
+    }
+    
+    public static void printTime() {
+    	System.out.println((System.nanoTime() - time)/1000000000.0);
+    	time = System.nanoTime();
     }
 
 }
