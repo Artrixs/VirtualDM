@@ -157,10 +157,10 @@ public class Parser {
 		if (name.contains(":") ) throw new RuntimeException("ID name can not contain the charachter ':'");
 	
 		if( inNamespace != null) {
-			return new ID(inNamespace, name);
+			return ID.newFromLocationName(inNamespace, name);
 		}
 			
-		return new ID(name);
+		return ID.newFromGlobalName(name);
 	}
 	
 	private static void parseAttribute(LoaderElement loaderElement) {

@@ -21,31 +21,71 @@
  */
 package utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ID {
 	private static String global = "Global";
+	private static Map<String, ID> allIDs = new HashMap<String, ID>();
 	
 	private String location;
 	private String name;
 	
-	public ID(String location, String name) {
-		this.location = location;
-		this.name = name;
+	public static ID newFromString(String string) {
+		if ( !string.contains(":" ) )
+			return newFromGlobalName(string);
+		
+		var tokens = string.split(":");
+		if( tokens.length != 2 )
+			throw new RuntimeException("ID: The string : \"" + string +"\" does not respect the format for IDS");
+		return newFromLocationName(tokens[0], tokens[1]);
+		
 	}
 	
-	public ID(String name) {
-		this.location = global;
-		this.name = name;
-	}
-	
-	public static ID fromString(String string) {
-		String [] tokens = string.split(":");
-		if ( tokens.length > 2) {
-			throw new RuntimeException("ID: There are to many : in this ID string");
+	public static ID newFromLocationName(String location, String name) {
+		String key = key(location, name);
+		
+		if ( allIDs.containsKey( key ) ) {
+			throw new RuntimeException("ID: this ID already exists!");
 		}
 		
-		if (tokens.length == 1)
-			return new ID(string);
-		return new ID(tokens[0], tokens[1]);
+		var id = new ID(location, name);
+		allIDs.put(key, id);
+		return id;
+	}
+	
+	public static ID newFromGlobalName( String name ) {
+		return newFromLocationName(global, name);
+	}
+	
+	public static ID getFromString( String string ) {
+		if ( !string.contains(":") ) {
+			return getFromGlobalName(string);
+		}
+		
+		var tokens = string.split(":");
+		if( tokens.length != 2 )
+			throw new RuntimeException("ID: The string : \"" + string +"\" does not respect the format for IDS");
+		return getFromLocationName(tokens[0], tokens[1]);
+	}
+	
+	public static ID getFromLocationName( String location, String name ) {
+		String key = key(location, name);
+		
+		if ( !allIDs.containsKey( key ) ) {
+			throw new RuntimeException("ID: this ID does not exists!");
+		}
+		
+		return allIDs.get(key);
+	}
+	
+	public static ID getFromGlobalName( String name ) {
+		return getFromLocationName( global, name );
+	}
+	
+	private ID(String location, String name) {
+		this.location = location;
+		this.name = name;
 	}
 	
 	public String getLocation() { return location; }
@@ -85,7 +125,11 @@ public class ID {
 
 	@Override
 	public String toString() {
-		return location + ":" + name;
+		return key(location, name);
+	}
+	
+	private static String key(String location, String name ) {
+		return location.strip() + ":" + name.strip();
 	}
 
 }

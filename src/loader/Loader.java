@@ -105,13 +105,12 @@ public class Loader {
 		if( el.hasAttribute( "circuit" ) ) {
 			String value = (String) el.getAttribute("circuit");
 			ID id;
-			if ( value.contains(":") )
-				id = ID.fromString(value);
+			if ( value.contains(":"))
+				id = ID.getFromString(value);
 			else
-				id = ID.fromString(el.id.getLocation() + ":" + value);
-					
-			var trackCircuit = layout.getTrackCircuit(id);
+				id = ID.getFromLocationName(el.id.getLocation(), value);
 			
+			var trackCircuit = layout.getTrackCircuit(id);
 			trackElement.setParentTrackCircuit(trackCircuit);		
 		}
 	}
@@ -130,9 +129,9 @@ public class Loader {
 		//Get the other trackElement
 		ID id;
 		if ( parts.length == 2)
-			id = ID.fromString(el.id.getLocation() + ":" + parts[0]);
+			id = ID.getFromLocationName(el.id.getLocation(), parts[0]);
 		else
-			id = ID.fromString(parts[0] + ":" + parts[1]);
+			id = ID.getFromLocationName(parts[0], parts[1]);
 
 		TrackElement track = layout.getTrackElement( id );
 		
