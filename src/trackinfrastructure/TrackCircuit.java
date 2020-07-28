@@ -47,6 +47,8 @@ public class TrackCircuit implements IUpdatable {
 	
 	public State getState() { return this.state; }
 	
+	public boolean isOccupied() { return this.state == State.OCCUPIED; }
+	
 	public void addTrack(TrackElement track) { 
 		this.tracks.add(track); 
 		update();
